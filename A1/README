@@ -1,0 +1,39 @@
+Included are four MATLAB function files with the following purposes:
+
+- genTree.m implements the computation of Huffman trees. It accepts as input
+  either a list of symbols with corresponding frequencies, or a string from
+  which such a list is computed.  The code extensively uses cell arrays;
+  please take a few moments to read up on them in the Matlab documentation.
+  You may also want to read up on strings (which in Matlab are character
+  arrays). Trees are implemented as cell arrays with the root node's label in
+  the first and the left and right subtrees in the second and third positions.
+
+- Huffman.m implements the recursive algorithm for generating Huffman trees.
+  It is called from genTree.m and does most of the work.
+  
+- encode.m takes as inputs a string and a code tree and returns the code for
+  the given string.
+
+- decode.m takes as inputs a code word and a code tree and recovers the
+  encoded string.
+  
+There are two further MATLAB scripts included in the archive that implement examples.  Please note the following important points:
+
+- The provided code is useless as is as it stores code symbols as 16-bit
+  characters.  In order to be useful, the character strings would need to be
+  converted to bit fields, reducing storage requirements by a factor of
+  sixteen.  I didn't bother, but when computing compression rates, please
+  assume a bit field representation.
+
+- There is no error checking, for example for when a code tree does not
+  contain a symbol that is to be encoded.  Don't worry about it, but make sure
+  you use the code appropriately.
+
+- Carriage returns and other special characters are not encoded.  When
+  computing compression rates, make sure you consider only those symbols that
+  are actually encoded.
+
+- I have made no attempt to optimize the code for efficiency.
+
+To explore the code that is provided, you may use the simple example provided
+in simple.m.  larger.m implements the larger example.
