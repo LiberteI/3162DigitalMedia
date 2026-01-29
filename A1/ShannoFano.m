@@ -45,4 +45,5 @@ function tree = ShannoFano(symbols, freqs)
     rightTree = ShannoFano(rightSymbols, rightFreqs);
     
     % construct the tree with subtrees
-    tree = {[leftTree{1}, rightTree{1}], leftTree, rightTree}; 
+    tree = {[leftTree{1}, rightTree{1}], leftTree, rightTree};
+end
