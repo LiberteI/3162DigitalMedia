@@ -1,11 +1,19 @@
-function tree = genTree(stringOrFreqs)
+function tree = genTree(stringOrFreqs, method)
     % GENTREE Generate a Huffman tree either from a given list of
     %   frequencies or from string used to compute frequencies.
     
     if iscell(stringOrFreqs)        % frequencies given
+        % get first row, and all columns
         syms = stringOrFreqs(1, :)';
-        freqs = [stringOrFreqs{2, :}]';
+        
+        % get cell row
+        freqRow = stringOrFreqs(2, :);
+
+        % covert to column vector
+        freqs = cell2mat(freqRow)';
+
     else                            % frequencies not given
+        % ASCII 32 - 126 ie white space, char, num, punctuation
         syms = cellstr(char(32:126)');
         syms{1} = ' ';
         count = @(c) sum(ismember(stringOrFreqs, c));
@@ -18,8 +26,15 @@ function tree = genTree(stringOrFreqs)
 
     [freqs, idx] = sort(freqs);     % sort by frequency of occurrence
     nodes = nodes(idx);
+    
+    % choose tree to generate based on method
+    if strcmp(method, "huffman")
+        tree = Huffman(nodes, freqs);
+        tree = tree{1};
+    elseif strcmp(method, "shannon")
 
-    tree = Huffman(nodes, freqs);
-    tree = tree{1};
+        % filter out symbols with a frequency of 0
+        tree = ShannonFano(syms(freqs > 0), freqs);
+    end
 
 end

@@ -1,5 +1,5 @@
 % function [return type] = Name (arg)
-function tree = ShannoFano(symbols, freqs)
+function tree = ShannonFano(symbols, freqs)
 
     % base case
     % when number of symbols == 1
@@ -26,10 +26,15 @@ function tree = ShannoFano(symbols, freqs)
     % add frequency from the first element to total number of elements
     for i = 1: numel(freqs)
         leftSum = leftSum + freqs(i);
-        if leftSum >= totaFreq / 2
+        if leftSum >= totalFreq / 2
             splitIdx = i;
             break;
         end
+    end
+
+    % guard tree so that tree wont be empty
+    if splitIdx == numel(freqs)
+        splitIdx = splitIdx - 1;
     end
 
     % create left sub trees 1 to split idx
@@ -41,8 +46,8 @@ function tree = ShannoFano(symbols, freqs)
     rightFreqs = freqs(splitIdx+1:end);
     
     % recursively generate more nodes
-    leftTree = ShannoFano(leftSymbols, leftFreqs);
-    rightTree = ShannoFano(rightSymbols, rightFreqs);
+    leftTree = ShannonFano(leftSymbols, leftFreqs);
+    rightTree = ShannonFano(rightSymbols, rightFreqs);
     
     % construct the tree with subtrees
     tree = {[leftTree{1}, rightTree{1}], leftTree, rightTree};
