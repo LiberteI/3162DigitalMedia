@@ -20,13 +20,18 @@ function tree = genTree(stringOrFreqs, method)
         freqs = cellfun(count, syms);
     end
     
-    makeNode = @(c) {c, {}, {}};    % single symbol with empty subtrees
-    nodes = cellfun(makeNode, syms(freqs>0), 'UniformOutput', false)';
+    % filter syms where syms(freq > 0)
+    syms = syms(freqs > 0);
+
     freqs = freqs(freqs>0)'/sum(freqs);
 
     [freqs, idx] = sort(freqs);     % sort by frequency of occurrence
-    nodes = nodes(idx);
+   
+    syms = syms(idx);
     
+    makeNode = @(c) {c, {}, {}};    % single symbol with empty subtrees
+    nodes = cellfun(makeNode, syms, 'UniformOutput', false)';
+
     % choose tree to generate based on method
     if strcmp(method, "huffman")
         tree = Huffman(nodes, freqs);
@@ -34,7 +39,7 @@ function tree = genTree(stringOrFreqs, method)
     elseif strcmp(method, "shannon")
 
         % filter out symbols with a frequency of 0
-        tree = ShannonFano(syms(freqs > 0), freqs);
+        tree = ShannonFano(syms, freqs);
     end
 
 end

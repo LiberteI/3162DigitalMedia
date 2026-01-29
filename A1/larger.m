@@ -3,11 +3,33 @@
 % read Readme file
 string = fileread('README');
 
-% Generate the Huffman tree from the string
-tree = genTree(string);
 
-% Encode the string using the generated Huffman tree
-code = encode(string, tree);
+% generate the Huffman tree from the string
+huffmanTree = genTree(string, "huffman");
 
-% Decode the string
-stringOut = decode(code, tree)
+% generate ShannonFano tree from the string
+shannonFanoTree = genTree(string, "shannon");
+
+% encode the string using the generated Huffman tree
+huffmanCode = encode(string, huffmanTree);
+
+% encode the string using the generated Shannon-Fano tree
+shannonFanoCode = encode(string, shannonFanoTree);
+
+% decode the string
+huffmanString = decode(huffmanCode, huffmanTree);
+shannonFanoString = decode(shannonFanoCode, shannonFanoTree);
+
+disp("Huffman Encoding");
+disp(huffmanCode);
+
+disp("Huffman Decoding");
+disp(huffmanString);
+
+disp(" ");
+
+disp("Shannon Encoding");
+disp(shannonFanoCode);
+
+disp("Shannon Decoding");
+disp(shannonFanoString);
