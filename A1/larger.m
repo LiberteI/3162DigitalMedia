@@ -3,6 +3,10 @@
 % read Readme file
 string = fileread('README');
 
+% prevent error in decoding unprintable characters in ASCII
+%                           NOT ASCII 32 - 126
+% regexprep(origin, substitute, replacement)
+string = regexprep(string, '[^\x20-\x7E]', ' ');
 
 % generate the Huffman tree from the string
 huffmanTree = genTree(string, "huffman");
