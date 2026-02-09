@@ -1,6 +1,6 @@
 
 % apply thresholding to image with a bit depth of b
-function ditheredImage = thresholding(Image, b)
+function ditheredImage = thresholding(image, b)
     % create 2^b levels
     levelCount = 2^b;
     
@@ -8,7 +8,7 @@ function ditheredImage = thresholding(Image, b)
     interval = levelCount - 1;
 
     % scale the level up so that we can perform round
-    scaledValues = Image * interval;
+    scaledValues = image * interval;
 
     % round image
     roundedImage = round(scaledValues);
