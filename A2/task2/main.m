@@ -17,7 +17,11 @@ audiowrite(outputPath, int16(predictionError_l1), sampleRate);
 
 [signal_l1, sampleRate_l1] = audioread('error_l1.wav', 'native');
 
+reconstructedSignal_l1 = reconstruct(predictionError_l1, coefficients_l1);
 
+% check equal: expected: reconstructedSignal = signal
+maxDifference = max(abs(int32(signal) - reconstructedSignal_l1));
+disp(maxDifference);
 
 
 % ---- sanity check ----
