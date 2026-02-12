@@ -1,5 +1,5 @@
-function showSinusoid(audio, sampleRate)
-    
+function showSinusoid(audio, sampleRate, filename)
+    figure;
     % convert audio to double
     audio = double(audio);
 
@@ -14,6 +14,6 @@ function showSinusoid(audio, sampleRate)
 
     xlabel('Time (s)');
     ylabel('Amplitude');
-    title(['Audio Signal at ', num2str(sampleRate), ' Hz']);
+    title(['Audio Signal at ', num2str(sampleRate), ' Hz ', filename]);
    
 end
