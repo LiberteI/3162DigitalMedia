@@ -1,13 +1,16 @@
-function predictionError = predict_signal(signal, coefficient)
+function predictionError = predict_signal(signal, coefficients)
     
+    % convert to int 32 to prevent overflow
+    signal = int32(signal); 
+
     % total number of samples
     numSamples = length(signal);
 
     % number of samples used in predictor
-    l = length(coefficient);
+    l = length(coefficients);
     
     % initialise array
-    predictionError = zeros(size(signal), 'int16');
+    predictionError = zeros(size(signal), 'int32');
     
     % store first l signal sample(s)
     predictionError(1 : l) = signal(1 : l);
@@ -18,10 +21,11 @@ function predictionError = predict_signal(signal, coefficient)
         
         % prediction = coefficient[1] * signal[n - 1] + coefficient[2] * signal[n - 2] + ... + coefficient[l] * signal[n - l]
         for k = 1 : l
-            currentPrediction = currentPrediction + coefficient(k) * signal(n - k);
+            currentPrediction = currentPrediction + coefficients(k) * signal(n - k);
         end
 
         % record prediction error
         predictionError(n) = signal(n) - currentPrediction;
     end
+
 end
