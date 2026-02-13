@@ -130,3 +130,37 @@ xlabel('Bit Depth');
 ylabel('MSE');
 title('MSE Comparison');
 grid on;
+
+% ==== showing dithered images ====
+
+bListToShow = [1 3 5 8];
+
+figure;
+for i = 1:length(bListToShow)
+    b = bListToShow(i);
+    ditheredImg1 = thresholding(image, b);
+    
+    subplot(2,2,i);
+    imshow(ditheredImg1, []);
+    title(['Threshold b = ', num2str(b)]);
+end
+
+figure;
+for i = 1:length(bListToShow)
+    b = bListToShow(i);
+    ditheredImg2 = noiseDithering(image, b);
+    
+    subplot(2,2,i);
+    imshow(ditheredImg2, []);
+    title(['Noise b = ', num2str(b)]);
+end
+
+figure;
+for i = 1:length(bListToShow)
+    b = bListToShow(i);
+    ditheredImg3 = floydSteinbergDithering(image, b);
+    
+    subplot(2,2,i);
+    imshow(ditheredImg3, []);
+    title(['Floyd Steinberg b = ', num2str(b)]);
+end
