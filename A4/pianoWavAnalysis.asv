@@ -18,20 +18,14 @@ title('First 5 seconds of piano.wav');
 % spectrogram
 figure;
 % the analysis frame
-% The purpose of the window is to analyze a small portion of the signal at a time.
+
 window = 4096;
-%[--------window 1--------]
-%        [--------window 2--------]
-%                [--------window 3--------]
-% hop size = 4096 - 3072 = 1024
+% 
 noverlap = 3072;
 % The Frequency Resolution
-% deltaF = Fs / nfft = 5.38Hz
-% The unit frequency gap is ~5Hz so that we can differentiate among 440Hz,
-% 445Hz, 450Hz etc.
 nfft = 8192;
 
-% S: short-time Fourier Transform 
+% S: short-time Fourier Transform
 % F: Y-axis values (frequency)
 % T: X-axis values (time)
 [S, F, T] = spectrogram(x5, hamming(window), noverlap, nfft, Fs);
