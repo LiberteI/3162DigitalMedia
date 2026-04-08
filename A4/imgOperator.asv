@@ -11,11 +11,11 @@ h = fspecial('disk', 4);
 H = psf2otf(h, size(img));
 
 % blurred image
-y = ifft2(H .* IMG);
+img_blurred = real(ifft2(H .* IMG));
 
 % add Gaussian noise
-noise = 0.01 * randn(size(y));
-y_noisy = y + noise;
+noise = 0.01 * randn(size(img_blurred));
+img_degraded = img_blurred + noise;
 
 
 % ---- Original Image ----
@@ -24,17 +24,78 @@ imshow(img);
 title('Original Image');
 % ---- Blur ----
 figure;
-imshow(y, []);
+imshow(img_blurred, []);
 title('Blurred Image');
+
 % ---- Add Noise ----
 figure;
-imshow(y_noisy, []);
+imshow(img_degraded, []);
 title('Blurred + Noisy Image');
 
 % Wiener filter: G(u,v) = H* / (|H|^2 + Su / Sx)
-% F(ixed img) = G * Y(broken img) 
+% Su / Sx: noise-to-signal ratio
+% F(ixed img) = G * Y(degraded img) 
 % H: blur frequency domain
 % H*: conjured H
 % |H|: amplitude
 % Su: noise power spectrum
-% Sx
+% Sx: image power spectrum
+
+% degraded image's Frequency Domain
+IMG_degraded = fft2(img_degraded);
+
+% H*
+H_conj = conj(H);
+
+% |H|^2 
+H_abs2 = abs(H).^2;
+
+% noise power. 
+Sn = ;
+
+% Cameraman
+Sx1 = abs(fft2(img)).^2;
+% Wiener filter
+epsilon = 1e-8;
+G1 = H_conj ./ (H_abs2 + Sn ./ (Sx1 + epsilon));  
+
+F_hat1 = G1 .* IMG_degraded;
+img_restored1 = real(ifft2(F_hat1));
+
+img_restored1_display = min(max(img_restored1, 0), 1);
+
+figure;
+imshow(img_restored1_display);
+title('Restored Cameraman Image');
+
+% ---- Print Parameters ----
+disp('===== PARAMETERS =====');
+
+disp('Noise power (Sn):');
+disp(Sn);
+
+disp('PSF (h):');
+disp(h);
+
+disp('H (frequency domain of PSF) size:');
+disp(size(H));
+
+disp('|H|^2 (magnitude squared) stats:');
+fprintf('Min: %e, Max: %e\n', min(H_abs2(:)), max(H_abs2(:)));
+
+disp('Sx1 (image power spectrum) stats:');
+fprintf('Min: %e, Max: %e\n', min(Sx1(:)), max(Sx1(:)));
+
+disp('Wiener filter G1 stats:');
+fprintf('Min: %e, Max: %e\n', min(abs(G1(:))), max(abs(G1(:))));
+
+disp('Degraded image stats:');
+fprintf('Min: %f, Max: %f\n', min(img_degraded(:)), max(img_degraded(:)));
+
+disp('Restored image stats:');
+fprintf('Min: %f, Max: %f\n', min(img_restored1(:)), max(img_restored1(:)));
+
+% SSE
+SSE1 = sum((img - img_restored1).^2, 'all');
+disp('SSE (Cameraman spectrum):');
+disp(SSE1);
